@@ -6,7 +6,7 @@
 /*   By: dagarmil <dagarmil@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:52:44 by dagarmil          #+#    #+#             */
-/*   Updated: 2024/07/23 14:24:59 by dagarmil         ###   ########.fr       */
+/*   Updated: 2024/08/01 12:33:38 by dagarmil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,26 @@ static int	ft_formats(va_list args, const char format)
 
 	size = 0;
 	if (format == 'c')
-		size = += ft_putchar_fd(va_arg(args, int), 1);
+		size += ft_printchar(va_arg(args, int));
+	else if (format == 's')
+		size += ft_printstr(va_arg(args, char *));
+	else if (format == 'p')
+		size += ft_printptr(va_arg(args, unsigned long long));
+	else if (format == 'd' || format == 'i')
+		size += ft_printnbr(va_arg(args, int));
+	else if (format == 'u')
+		size += ft_printunsigned(va_arg(args, unsigned int));
+	else if (format == 'x' || format == 'X')
+		size += ft_printhex(va_arg(args, unsigned int), format);
+	else if (format == '%')
+		size += ft_printpercent();
 	return (size);
 }
 
 int	ft_printf(const char *str, ...)
 {
-	int	    i;
-	int	    size;
+	int		i;
+	int		size;
 	va_list	args;
 
 	i = 0;
@@ -39,8 +51,11 @@ int	ft_printf(const char *str, ...)
 			i++;
 		}
 		else
-			size += ft_putchar_fd(str[i], 1);
-		i++
+		{
+			size += 1;
+			ft_putchar_fd(str[i], 1);
+		}
+		i++;
 	}
 	va_end(args);
 	return (size);
